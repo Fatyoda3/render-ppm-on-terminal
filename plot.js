@@ -35,12 +35,10 @@ const makeLine = (p1, p2, screen, icon = "xx") => {
 
   const outerKey = (Math.abs(dx) > Math.abs(dy)) ? `x` : `y`;
   const innerKey = (Math.abs(dx) > Math.abs(dy)) ? `y` : `x`;
-  // console.log({ outerKey });
 
   const outerLoopSt = Math.min(p1[outerKey], p2[outerKey]);
   const outerLoopEn = Math.max(p1[outerKey], p2[outerKey]);
   const innerLoopSt = Math.min(p1[innerKey], p2[innerKey]);
-  // console.log({ outerLoopSt, outerLoopEn });
 
   const slope = dy / dx;
 

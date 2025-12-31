@@ -1,0 +1,2 @@
+create a script for setup of a folder 
+create an image

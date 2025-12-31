@@ -1,4 +1,4 @@
-import { chunk } from "./chunk.js";
+import { chunk } from "../helpers/chunk.js";
 const HEIGHT = 20;
 const WIDTH = 20;
 const BLOCK = "🟥";

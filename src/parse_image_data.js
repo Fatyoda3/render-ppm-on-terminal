@@ -22,7 +22,7 @@ const getHeaderAndBin = (imageData) => {
 const parseHeader = (metaData) => {
   const asciiHeader = String.fromCharCode(...metaData);
   const [type, dimension, maxColor] = asciiHeader.split("\n");
-  const [height, width] = dimension.split(" ");
+  const [width, height] = dimension.split(" ");
 
   return { type, height, width, maxColor };
 };
@@ -31,6 +31,7 @@ const parseImagePath = (imagePath) => {
   const delimiterSlash = imagePath.lastIndexOf("/");
   const name = imagePath.slice(delimiterSlash + 1, -4);
   const dirPath = `./data/image-${name}`;
+
   return dirPath;
 };
 
@@ -52,14 +53,27 @@ const getWriteParams = async (imagePath) => {
   const metadataPath = `${dirPath}/metadata.json`;
   const binPath = `${dirPath}/pixels.bin`;
 
-  return [binPath, rawBin, metadataPath, metadata];
+  return [binPath, rawBin, metadataPath, metadata, dirPath];
 };
 
 export const writeBinaryAndHeader = async (imgPath = "") => {
-  const [binPath, rawBin, metaPath, metadata] = await getWriteParams(imgPath);
+  const [binPath, rawBin, metaPath, metadata, dirPath] = await getWriteParams(
+    imgPath,
+  );
+
+  const imageAlreadyProcessed = Deno.readDirSync(dirPath);
+  const paths = { binPath, metaPath, metadata };
+
+  console.log({ metadata });
+
+  if (imageAlreadyProcessed.toArray().length === 2) {
+    console.log("BIN EXISTS");
+
+    return paths;
+  }
 
   await Deno.writeTextFile(metaPath, JSON.stringify(metadata));
   await Deno.writeFile(binPath, rawBin);
 
-  return { binPath, metaPath, metadata };
+  return paths;
 };

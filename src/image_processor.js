@@ -2,7 +2,7 @@ import { chunk } from "./chunk.js";
 const CHANNELS = 3;
 
 const parseBinaryToPixels = (imageBin = [], metadata) => {
-  const { _height, width } = JSON.parse(metadata);
+  const { height, width } = JSON.parse(metadata);
   const rows = chunk(imageBin, CHANNELS * width);
   const pixels = rows.map((row) => chunk(row, CHANNELS));
   return pixels;
@@ -27,6 +27,7 @@ const printByChunks = async (pixels, delay = 0) => {
     });
   }
 };
+
 const mapColors = (pixels) =>
   pixels.map((row) => row.map((pixel) => setColor(pixel)));
 

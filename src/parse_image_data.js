@@ -1,7 +1,7 @@
 const NEW_LINE_ASCII = 10;
-const IMAGE_PATH = "./data/kirby/kirby.ppm";
+const TEST = "./data/kirby/kirby.ppm";
 
-const extractMetadataAndBinary = (imageData) => {
+const getHeaderAndBin = (imageData) => {
   let delimiter = 0;
   let newLineCount = 0;
 
@@ -45,7 +45,7 @@ const getWriteParams = async (imagePath) => {
 
   const imageData = await Deno.readFile(imagePath);
 
-  const [header, rawBin] = extractMetadataAndBinary(imageData);
+  const [header, rawBin] = getHeaderAndBin(imageData);
   const metadata = parseHeader(header);
 
   const jsonPath = `${dirPath}/metadata.json`;
@@ -59,6 +59,5 @@ export const writeBinaryAndHeader = async (imgPath = "") => {
 
   await Deno.writeTextFile(jsonPath, JSON.stringify(metadata));
   await Deno.writeFile(binPath, rawBin);
+  return { "SUCCESS": { binPath, jsonPath, metadata } };
 };
-
-writeBinaryAndHeader(IMAGE_PATH);

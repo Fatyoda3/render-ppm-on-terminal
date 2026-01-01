@@ -25,13 +25,15 @@ const parseHeader = (metaData) => {
 
   return { type, height, width, maxColor };
 };
+
 const parseImagePath = (imagePath) => {
   const delimiterSlash = imagePath.lastIndexOf("/");
   const name = imagePath.slice(delimiterSlash + 1, -4);
   const dirPath = `./data/image-${name}`;
   return dirPath;
 };
-export const writeBinaryAndHeader = async (imagePath = "") => {
+
+const getWriteParams = async (imagePath) => {
   const dirPath = parseImagePath(imagePath);
 
   try {
@@ -43,14 +45,20 @@ export const writeBinaryAndHeader = async (imagePath = "") => {
 
   const imageData = await Deno.readFile(imagePath);
 
-  const [metaData, rawBinary] = extractMetadataAndBinary(imageData);
-  const metaDataObj = parseHeader(metaData);
+  const [header, rawBin] = extractMetadataAndBinary(imageData);
+  const metadata = parseHeader(header);
 
   const jsonPath = `${dirPath}/metadata.json`;
-  const binaryPath = `${dirPath}/pixels.bin`;
+  const binPath = `${dirPath}/pixels.bin`;
 
-  await Deno.writeTextFile(jsonPath, JSON.stringify(metaDataObj));
-  await Deno.writeFile(binaryPath, rawBinary);
+  return [binPath, rawBin, jsonPath, metadata];
+};
+
+export const writeBinaryAndHeader = async (imgPath = "") => {
+  const [binPath, rawBin, jsonPath, metadata] = await getWriteParams(imgPath);
+
+  await Deno.writeTextFile(jsonPath, JSON.stringify(metadata));
+  await Deno.writeFile(binPath, rawBin);
 };
 
 writeBinaryAndHeader(IMAGE_PATH);

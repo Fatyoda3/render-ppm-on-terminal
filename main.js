@@ -5,13 +5,9 @@ const KIRBY = "./data/kirby/kirby.ppm";
 const SCENE = "./data/test/scene.ppm";
 
 const main = async () => {
-  const { binPath, jsonPath } = await writeBinaryAndHeader(SCENE);
-  // console.log({ binPath, jsonPath });
+  const { binPath, metaPath } = await writeBinaryAndHeader(SCENE);
 
-  // const binPath1 = "./data/image-scene/pixels.bin";
-  // const metadataPath = "./data/image-scene/metadata.json";
-
-  // await displayImage(binPath1, metadataPath);
+  await displayImage(binPath, metaPath);
 };
 
 main();

@@ -48,18 +48,17 @@ const getWriteParams = async (imagePath) => {
   const [header, rawBin] = getHeaderAndBin(imageData);
   const metadata = parseHeader(header);
 
-  const jsonPath = `${dirPath}/metadata.json`;
+  const metadataPath = `${dirPath}/metadata.json`;
   const binPath = `${dirPath}/pixels.bin`;
 
-  return [binPath, rawBin, jsonPath, metadata];
+  return [binPath, rawBin, metadataPath, metadata];
 };
 
 export const writeBinaryAndHeader = async (imgPath = "") => {
-  const [binPath, rawBin, jsonPath, metadata] = await getWriteParams(imgPath);
+  const [binPath, rawBin, metaPath, metadata] = await getWriteParams(imgPath);
 
-  await Deno.writeTextFile(jsonPath, JSON.stringify(metadata));
+  await Deno.writeTextFile(metaPath, JSON.stringify(metadata));
   await Deno.writeFile(binPath, rawBin);
-  console.log({ binPath, jsonPath, metadata });
 
-  return { binPath, jsonPath, metadata };
+  return { binPath, metaPath, metadata };
 };

@@ -27,11 +27,16 @@ const printByChunks = async (pixels) => {
     });
   }
 };
+const mapColors = (pixels) =>
+  pixels.map((row) => row.map((pixel) => setColor(pixel)));
 
-const imageBin = await Deno.readFile("./data/image-scene/pixels.bin");
-const metaData = await Deno.readTextFile("./data/image-scene/metadata.json");
+export const displayImage = async () => {
+  const imageBin = await Deno.readFile("./data/image-scene/pixels.bin");
+  const metaData = await Deno.readTextFile("./data/image-scene/metadata.json");
 
-const pixels = parseBinaryToPixels(imageBin, metaData);
-const rendered = pixels.map((row) => row.map((pixel) => setColor(pixel)));
+  const pixels = parseBinaryToPixels(imageBin, metaData);
+  const rendered = mapColors(pixels);
 
-await printByChunks(rendered);
+  await printByChunks(rendered);
+};
+displayImage();

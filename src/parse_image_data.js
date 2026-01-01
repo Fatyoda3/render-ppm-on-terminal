@@ -1,19 +1,25 @@
+const NEW_LINE_ASCII = 10;
+
 const path = "./data/kirby/512.ppm";
+const imageData = await Deno.readFile(path);
 
-const rawData = await Deno.readFile(path);
-let i = 0;
+const splitData = (imageData) => {
+  let byteIndex = 0;
+  let newLineCount = 0;
 
-let c = 0;
-
-while (c < 3) {
-  if (rawData[i] === 10) {
-    c += 1;
+  while (newLineCount < 3) {
+    if (imageData[byteIndex] === NEW_LINE_ASCII) {
+      newLineCount += 1;
+    }
+    byteIndex += 1;
   }
-  i += 1;
-}
 
-const metaData = rawData.slice(0, i);
-const rawBinary = rawData.slice(i);
+  const metaData = imageData.slice(0, byteIndex);
+  const rawBinary = imageData.slice(byteIndex);
+  return [metaData, rawBinary];
+};
+
+const [metaData, rawBinary] = splitData(imageData);
 
 console.log({ metaData });
 const data = metaData.map((x) => String.fromCharCode(x)); //weird

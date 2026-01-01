@@ -1,5 +1,3 @@
-import { json } from "node:stream/consumers";
-
 const NEW_LINE_ASCII = 10;
 const path = "./data/kirby/512.ppm";
 const imageData = await Deno.readFile(path);

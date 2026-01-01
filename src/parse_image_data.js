@@ -1,5 +1,6 @@
-const NEW_LINE_ASCII = 10;
+import { json } from "node:stream/consumers";
 
+const NEW_LINE_ASCII = 10;
 const path = "./data/kirby/512.ppm";
 const imageData = await Deno.readFile(path);
 
@@ -20,28 +21,29 @@ export const extractMetadataAndBinary = (imageData) => {
   return [metaData, rawBinary];
 };
 
-const [metaData, rawBinary] = extractMetadataAndBinary(imageData);
+const parseHeader = (metaData) => {
+  const asciiHeader = String.fromCharCode(...metaData);
+  const [type, dimension, maxColor] = asciiHeader.split("\n");
+  const [height, width] = dimension.split(" ");
+  const metaDataFields = {
+    type,
+    height,
+    width,
+    maxColor,
+  };
 
-const asciiHeader = String.fromCharCode(...metaData);
-
-console.log(asciiHeader);
-
-const [type, dimension, maxColor] = asciiHeader.split("\n");
-
-const [height, width] = dimension.split(" ");
-
-const metaDataFields = {
-  type,
-  height,
-  width,
-  maxColor,
+  return metaDataFields;
 };
 
-console.log(metaDataFields);
+export const writeBinaryAndHeader = async () => {
+  const [metaData, rawBinary] = extractMetadataAndBinary(imageData);
+  const metaDataObj = parseHeader(metaData);
 
-await Deno.writeTextFile(
-  "./data/kirby/metadata.json",
-  JSON.stringify(metaDataFields),
-);
+  const jsonPath = "./data/kirby/metadata.json";
+  const binaryPath = "./data/kirby/pixels.bin";
 
-await Deno.writeFile("./data/kirby/pixels.bin", rawBinary);
+  await Deno.writeTextFile(jsonPath, JSON.stringify(metaDataObj));
+  await Deno.writeFile(binaryPath, rawBinary);
+};
+
+writeBinaryAndHeader();

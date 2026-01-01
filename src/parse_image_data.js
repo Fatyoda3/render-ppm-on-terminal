@@ -25,15 +25,15 @@ await Deno.writeFile(
   metaData,
 );
 
-await Deno.writeFile("./data/kirby/image.bin", rawBinary);
+await Deno.writeFile("./data/kirby/pixels.bin", rawBinary);
 
-const content = await Deno.readTextFile("./data/kirby/metadata.txt");
+const content = await Deno.readTextFile("./data/kirby/metadata.json");
 
 const [type, dimension, maxColor] = content.split("\n");
 
 const [height, width] = dimension.split(" ");
 
-const metaDatas = {
+const metaDataFields = {
   type,
   height,
   width,
@@ -42,5 +42,5 @@ const metaDatas = {
 
 await Deno.writeTextFile(
   "./data/kirby/metadata.txt",
-  JSON.stringify(metaDatas),
+  JSON.stringify(metaDataFields),
 );

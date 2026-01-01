@@ -1,7 +1,7 @@
 import { chunk } from "./chunk.js";
 
-const imageBin = await Deno.readFile("./data/kirby/image.bin");
-const metaData = await Deno.readTextFile("./data/kirby/metadata.txt");
+const imageBin = await Deno.readFile("./data/kirby/pixels.bin");
+const metaData = await Deno.readTextFile("./data/kirby/metadata.json");
 
 const { height, width } = JSON.parse(metaData);
 

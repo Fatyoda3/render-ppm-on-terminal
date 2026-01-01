@@ -1,21 +1,22 @@
 const NEW_LINE_ASCII = 10;
-const TEST = "./data/kirby/kirby.ppm";
+const MAX_SKIPS = 3;
+const _TEST = "./data/kirby/kirby.ppm";
 
 const getHeaderAndBin = (imageData) => {
-  let delimiter = 0;
+  let delimiterIndex = 0;
   let newLineCount = 0;
 
-  while (newLineCount < 3) {
-    if (imageData[delimiter] === NEW_LINE_ASCII) {
+  while (newLineCount < MAX_SKIPS) {
+    if (imageData[delimiterIndex] === NEW_LINE_ASCII) {
       newLineCount += 1;
     }
-    delimiter += 1;
+    delimiterIndex += 1;
   }
 
-  const metaData = imageData.slice(0, delimiter);
-  const rawBinary = imageData.slice(delimiter);
+  const metaData = imageData.slice(0, delimiterIndex);
+  const rawBin = imageData.slice(delimiterIndex);
 
-  return [metaData, rawBinary];
+  return [metaData, rawBin];
 };
 
 const parseHeader = (metaData) => {

@@ -1,18 +1,20 @@
 import { writeBinaryAndHeader } from "./src/parse_image_data.js";
 import { displayImage } from "./src/image_processor.js";
-
+const DELAY = 1;
 const KIRBY = "./data/kirby/kirby.ppm";
-const SCENE = "./data/test/scene.ppm";
+const SCENE = "./data/scene/scene.ppm";
 
 const images = [KIRBY, SCENE];
 
 const drawOneImage = async (imagePath) => {
   const { binPath, metaPath } = await writeBinaryAndHeader(imagePath);
-  await displayImage(binPath, metaPath);
+  await displayImage(binPath, metaPath, DELAY);
 };
+
 const main = async () => {
-  await drawOneImage(SCENE);
-  await drawOneImage(KIRBY);
+  for (const image of images) {
+    await drawOneImage(image);
+  }
 };
 
 main();

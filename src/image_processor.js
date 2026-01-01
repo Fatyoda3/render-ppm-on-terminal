@@ -15,7 +15,7 @@ const draw = (pixels) => {
 const setColor = ([R, G, B], char = "  ") =>
   `\x1b[48;2;${R};${G};${B}m${char}\x1b[0m`;
 
-const printByChunks = async (pixels) => {
+const printByChunks = async (pixels, delay = 0) => {
   const imageParts = chunk(pixels, 10);
 
   for (const part of imageParts) {
@@ -23,19 +23,19 @@ const printByChunks = async (pixels) => {
       setTimeout(() => {
         draw(part);
         resolve(1);
-      }, 50);
+      }, delay);
     });
   }
 };
 const mapColors = (pixels) =>
   pixels.map((row) => row.map((pixel) => setColor(pixel)));
 
-export const displayImage = async (binPath, metadataPath) => {
+export const displayImage = async (binPath, metadataPath, delay) => {
   const imageBin = await Deno.readFile(binPath);
   const metadata = await Deno.readTextFile(metadataPath);
 
   const pixels = parseBinaryToPixels(imageBin, metadata);
   const rendered = mapColors(pixels);
 
-  await printByChunks(rendered);
+  await printByChunks(rendered, delay);
 };

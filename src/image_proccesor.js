@@ -1,12 +1,8 @@
 import { chunk } from "./chunk.js";
 const CHANNELS = 3;
 
-const imageBin = await Deno.readFile("./data/kirby/pixels.bin");
-const metaData = await Deno.readTextFile("./data/kirby/metadata.json");
-
-const { _height, width } = JSON.parse(metaData);
-
-const parseBinaryToPixels = (imageBin = []) => {
+const parseBinaryToPixels = (imageBin = [], metaData) => {
+  const { _height, width } = JSON.parse(metaData);
   const rows = chunk(imageBin, CHANNELS * width);
   const pixels = rows.map((row) => chunk(row, CHANNELS));
   return pixels;
@@ -32,7 +28,10 @@ const printByChunks = async (pixels) => {
   }
 };
 
-const pixels = parseBinaryToPixels(imageBin);
+const imageBin = await Deno.readFile("./data/image-scene/pixels.bin");
+const metaData = await Deno.readTextFile("./data/image-scene/metadata.json");
+
+const pixels = parseBinaryToPixels(imageBin, metaData);
 const rendered = pixels.map((row) => row.map((pixel) => setColor(pixel)));
 
 await printByChunks(rendered);

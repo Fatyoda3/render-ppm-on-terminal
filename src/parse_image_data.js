@@ -1,5 +1,5 @@
 const NEW_LINE_ASCII = 10;
-const IMAGE_PATH = "./data/kirby/512.ppm";
+const IMAGE_PATH = "./data/kirby/kirby.ppm";
 
 const extractMetadataAndBinary = (imageData) => {
   let delimiter = 0;
@@ -25,18 +25,20 @@ const parseHeader = (metaData) => {
 
   return { type, height, width, maxColor };
 };
-
-export const writeBinaryAndHeader = async (imagePath = "") => {
+const parseImagePath = (imagePath) => {
   const delimiterSlash = imagePath.lastIndexOf("/");
   const name = imagePath.slice(delimiterSlash + 1, -4);
-
   const dirPath = `./data/image-${name}`;
+  return dirPath;
+};
+export const writeBinaryAndHeader = async (imagePath = "") => {
+  const dirPath = parseImagePath(imagePath);
 
   try {
     await Deno.mkdir(dirPath);
     console.log("DIRECTORY created", dirPath);
   } catch (err) {
-    console.log(err, "ERR");
+    console.log(err.name, " : ERROR");
   }
 
   const imageData = await Deno.readFile(imagePath);
@@ -44,8 +46,8 @@ export const writeBinaryAndHeader = async (imagePath = "") => {
   const [metaData, rawBinary] = extractMetadataAndBinary(imageData);
   const metaDataObj = parseHeader(metaData);
 
-  const jsonPath = "./data/kirby/metadata.json";
-  const binaryPath = "./data/kirby/pixels.bin";
+  const jsonPath = `${dirPath}/metadata.json`;
+  const binaryPath = `${dirPath}/pixels.bin`;
 
   await Deno.writeTextFile(jsonPath, JSON.stringify(metaDataObj));
   await Deno.writeFile(binaryPath, rawBinary);

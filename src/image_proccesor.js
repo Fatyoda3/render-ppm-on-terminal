@@ -7,7 +7,7 @@ const { height, width } = JSON.parse(metaData);
 
 const channels = 3;
 
-const parseBinary = (raw = []) => {
+const parseBinary = (imageBin = []) => {
   const rows = chunk(imageBin, 3 * width);
   const pixels = rows.map((row) => chunk(row, channels));
   return pixels;

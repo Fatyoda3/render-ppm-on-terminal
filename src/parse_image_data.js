@@ -22,25 +22,26 @@ export const extractMetadataAndBinary = (imageData) => {
 
 const [metaData, rawBinary] = extractMetadataAndBinary(imageData);
 
-console.log({ metaData });
-
 const asciiHeader = String.fromCharCode(...metaData);
 
 console.log(asciiHeader);
 
-// await Deno.writeFile("./data/kirby/pixels.bin", rawBinary);
-// const [type, dimension, maxColor] = asciiHeader.split("\n");
+const [type, dimension, maxColor] = asciiHeader.split("\n");
 
-// const [height, width] = dimension.split(" ");
+const [height, width] = dimension.split(" ");
 
-// const metaDataFields = {
-//   type,
-//   height,
-//   width,
-//   maxColor,
-// };
+const metaDataFields = {
+  type,
+  height,
+  width,
+  maxColor,
+};
 
-// await Deno.writeTextFile(
-//   "./data/kirby/metadata.json",
-//   JSON.stringify(metaDataFields),
-// );
+console.log(metaDataFields);
+
+await Deno.writeTextFile(
+  "./data/kirby/metadata.json",
+  JSON.stringify(metaDataFields),
+);
+
+await Deno.writeFile("./data/kirby/pixels.bin", rawBinary);

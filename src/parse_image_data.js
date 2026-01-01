@@ -3,7 +3,7 @@ const NEW_LINE_ASCII = 10;
 const path = "./data/kirby/512.ppm";
 const imageData = await Deno.readFile(path);
 
-const splitData = (imageData) => {
+const extractMetadataAndBinary = (imageData) => {
   let byteIndex = 0;
   let newLineCount = 0;
 
@@ -16,37 +16,35 @@ const splitData = (imageData) => {
 
   const metaData = imageData.slice(0, byteIndex);
   const rawBinary = imageData.slice(byteIndex);
+
   return [metaData, rawBinary];
 };
 
-const [metaData, rawBinary] = splitData(imageData);
+const [metaData, rawBinary] = extractMetadataAndBinary(imageData);
 
 console.log({ metaData });
-const data = metaData.map((x) => String.fromCharCode(x)); //weird
+const data = (Array.from(metaData)).map((x) => String.fromCharCode(x)); //weird
 console.log({ data });
-///investigate
+// investigate the behavior of String.fromCharCode
+//  not working properly with Uint8Array
 
-await Deno.writeFile(
-  "./data/kirby/metadata.txt",
-  metaData,
-);
+// await Deno.writeFile("./data/kirby/metadata.txt", metaData);
+// await Deno.writeFile("./data/kirby/pixels.bin", rawBinary);
 
-await Deno.writeFile("./data/kirby/pixels.bin", rawBinary);
+// const content = await Deno.readTextFile("./data/kirby/metadata.json");
 
-const content = await Deno.readTextFile("./data/kirby/metadata.json");
+// const [type, dimension, maxColor] = content.split("\n");
 
-const [type, dimension, maxColor] = content.split("\n");
+// const [height, width] = dimension.split(" ");
 
-const [height, width] = dimension.split(" ");
+// const metaDataFields = {
+//   type,
+//   height,
+//   width,
+//   maxColor,
+// };
 
-const metaDataFields = {
-  type,
-  height,
-  width,
-  maxColor,
-};
-
-await Deno.writeTextFile(
-  "./data/kirby/metadata.txt",
-  JSON.stringify(metaDataFields),
-);
+// await Deno.writeTextFile(
+//   "./data/kirby/metadata.txt",
+//   JSON.stringify(metaDataFields),
+// );

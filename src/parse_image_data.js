@@ -3,7 +3,7 @@ const NEW_LINE_ASCII = 10;
 const path = "./data/kirby/512.ppm";
 const imageData = await Deno.readFile(path);
 
-const extractMetadataAndBinary = (imageData) => {
+export const extractMetadataAndBinary = (imageData) => {
   let byteIndex = 0;
   let newLineCount = 0;
 
@@ -23,17 +23,13 @@ const extractMetadataAndBinary = (imageData) => {
 const [metaData, rawBinary] = extractMetadataAndBinary(imageData);
 
 console.log({ metaData });
-const data = (Array.from(metaData)).map((x) => String.fromCharCode(x)); //weird
-console.log({ data });
-// investigate the behavior of String.fromCharCode
-//  not working properly with Uint8Array
 
-// await Deno.writeFile("./data/kirby/metadata.txt", metaData);
+const asciiHeader = String.fromCharCode(...metaData);
+
+console.log(asciiHeader);
+
 // await Deno.writeFile("./data/kirby/pixels.bin", rawBinary);
-
-// const content = await Deno.readTextFile("./data/kirby/metadata.json");
-
-// const [type, dimension, maxColor] = content.split("\n");
+// const [type, dimension, maxColor] = asciiHeader.split("\n");
 
 // const [height, width] = dimension.split(" ");
 
@@ -45,6 +41,6 @@ console.log({ data });
 // };
 
 // await Deno.writeTextFile(
-//   "./data/kirby/metadata.txt",
+//   "./data/kirby/metadata.json",
 //   JSON.stringify(metaDataFields),
 // );

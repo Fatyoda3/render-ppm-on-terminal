@@ -28,10 +28,16 @@ const parseHeader = (metaData) => {
 
 export const writeBinaryAndHeader = async (imagePath = "") => {
   const delimiterSlash = imagePath.lastIndexOf("/");
-  console.log("DIR NAME SHOULD BE", imagePath.slice(delimiterSlash));
+  const name = imagePath.slice(delimiterSlash + 1, -4);
 
-  // const dirPath  = ``
-  // Deno.mkdir()
+  const dirPath = `./data/image-${name}`;
+
+  try {
+    await Deno.mkdir(dirPath);
+    console.log("DIRECTORY created", dirPath);
+  } catch (err) {
+    console.log(err, "ERR");
+  }
 
   const imageData = await Deno.readFile(imagePath);
 

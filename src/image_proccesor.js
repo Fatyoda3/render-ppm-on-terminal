@@ -1,8 +1,8 @@
 import { chunk } from "./chunk.js";
 const CHANNELS = 3;
 
-const parseBinaryToPixels = (imageBin = [], metaData) => {
-  const { _height, width } = JSON.parse(metaData);
+const parseBinaryToPixels = (imageBin = [], metadata) => {
+  const { _height, width } = JSON.parse(metadata);
   const rows = chunk(imageBin, CHANNELS * width);
   const pixels = rows.map((row) => chunk(row, CHANNELS));
   return pixels;
@@ -30,13 +30,15 @@ const printByChunks = async (pixels) => {
 const mapColors = (pixels) =>
   pixels.map((row) => row.map((pixel) => setColor(pixel)));
 
-export const displayImage = async () => {
-  const imageBin = await Deno.readFile("./data/image-scene/pixels.bin");
-  const metaData = await Deno.readTextFile("./data/image-scene/metadata.json");
+export const displayImage = async (binPath, metadataPath) => {
+  const imageBin = await Deno.readFile(binPath);
+  const metadata = await Deno.readTextFile(metadataPath);
 
-  const pixels = parseBinaryToPixels(imageBin, metaData);
+  const pixels = parseBinaryToPixels(imageBin, metadata);
   const rendered = mapColors(pixels);
 
   await printByChunks(rendered);
 };
-displayImage();
+const binPath = "./data/image-scene/pixels.bin";
+const metadataPath = "./data/image-scene/metadata.json";
+displayImage(binPath, metadataPath);

@@ -42,4 +42,4 @@ const printByChunks = async (pixels) => {
   }
 };
 
-await printByChunks(screen.pixels);
+// await printByChunks(screen.pixels);

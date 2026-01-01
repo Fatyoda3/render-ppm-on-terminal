@@ -59,5 +59,7 @@ export const writeBinaryAndHeader = async (imgPath = "") => {
 
   await Deno.writeTextFile(jsonPath, JSON.stringify(metadata));
   await Deno.writeFile(binPath, rawBin);
-  return { "SUCCESS": { binPath, jsonPath, metadata } };
+  console.log({ binPath, jsonPath, metadata });
+
+  return { binPath, jsonPath, metadata };
 };

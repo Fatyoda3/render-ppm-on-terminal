@@ -39,6 +39,3 @@ export const displayImage = async (binPath, metadataPath) => {
 
   await printByChunks(rendered);
 };
-const binPath = "./data/image-scene/pixels.bin";
-const metadataPath = "./data/image-scene/metadata.json";
-displayImage(binPath, metadataPath);

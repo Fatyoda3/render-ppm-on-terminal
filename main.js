@@ -1,8 +1,8 @@
 import { writeBinaryAndHeader } from "./src/parse_image_data.js";
 import { displayImage } from "./src/image_processor.js";
 const DELAY = 1;
-const KIRBY = "./data/kirby/kirby.ppm";
-const SCENE = "./data/scene/scene.ppm";
+const KIRBY = "./ppm/kirby/kirby.ppm";
+const SCENE = "./ppm/scene/scene.ppm";
 
 const images = [KIRBY, SCENE];
 

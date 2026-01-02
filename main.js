@@ -1,7 +1,7 @@
 import { writeBinaryAndHeader } from "./src/parse_image_data.js";
 import { displayImage } from "./src/image_processor.js";
-const GALLERY = "./gallery.json";
 
+const GALLERY = "./gallery.json";
 const DELAY = 100;
 
 const IMAGES = [];
@@ -14,7 +14,6 @@ const loadImages = async () => {
 };
 
 const drawOneImage = async ({ binPath, metaPath }, debug = false) => {
-  // console.log({ binPath, metaPath });
   debug || await displayImage(binPath, metaPath, DELAY);
 };
 
@@ -25,7 +24,8 @@ const addNewImage = async (imagePath) => {
   Deno.writeTextFile(GALLERY, JSON.stringify(IMAGES));
   console.log({ metaPath, binPath }, "ADDED SUCCESSFULLY");
 };
-await loadImages();
+
+await loadImages(); //THIS is UGLY but needed
 
 const displayImages = async ({ debug = false }) => {
   for (const image of IMAGES) {
@@ -34,11 +34,11 @@ const displayImages = async ({ debug = false }) => {
 };
 
 const main = async (add = false) => {
-  if (add) {
+  if (add === "add") {
     await addNewImage(prompt("enter path :").trim());
   }
 
-  await displayImages({ debug: true });
+  await displayImages({ debug: false });
 };
 
-main(true);
+main(Deno.args[0]);

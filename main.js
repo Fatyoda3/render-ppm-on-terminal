@@ -3,32 +3,42 @@ import { displayImage } from "./src/image_processor.js";
 const GALLERY = "./gallery.json";
 
 const DELAY = 100;
-const SCENE = "./ppm/scene/scene.ppm";
-const TREE_TRUNK = "./ppm/tree_trunk/tree_trunk.ppm";
-const BAT_SIGNAL = "./ppm/bat_signal/bat_signal.ppm";
 
-const IMAGES = [SCENE, TREE_TRUNK, BAT_SIGNAL];
-const galleryHandle = await Deno.readTextFile(GALLERY);
-const payload = [];
+const IMAGES = [];
 
-if (galleryHandle.length !== 0) {
-  payload.push(...(JSON.parse(galleryHandle)));
-}
+const loadImages = async () => {
+  const galleryHandle = await Deno.readTextFile(GALLERY);
+  if (galleryHandle.length !== 0) {
+    IMAGES.push(...(JSON.parse(galleryHandle)));
+  }
+};
 
-const drawOneImage = async (imagePath, debug = false) => {
-  // const { binPath, metaPath } = await writeBinaryAndHeader(imagePath);
-  payload.push({ binPath, metaPath });
-
+const drawOneImage = async ({ binPath, metaPath }, debug = false) => {
+  // console.log({ binPath, metaPath });
   debug || await displayImage(binPath, metaPath, DELAY);
 };
 
-const addNewImage = () => {};
-const main = async () => {
+const addNewImage = async (imagePath) => {
+  const { metaPath, binPath } = await writeBinaryAndHeader(imagePath);
+  IMAGES.push({ metaPath, binPath });
+
+  Deno.writeTextFile(GALLERY, JSON.stringify(IMAGES));
+  console.log({ metaPath, binPath }, "ADDED SUCCESSFULLY");
+};
+await loadImages();
+
+const displayImages = async ({ debug = false }) => {
   for (const image of IMAGES) {
-    await drawOneImage(image, true);
+    await drawOneImage(image, debug);
   }
-  // console.log({ payload });
-  Deno.writeTextFile(GALLERY, JSON.stringify(payload));
 };
 
-main();
+const main = async (add = false) => {
+  if (add) {
+    await addNewImage(prompt("enter path :").trim());
+  }
+
+  await displayImages({ debug: true });
+};
+
+main(true);

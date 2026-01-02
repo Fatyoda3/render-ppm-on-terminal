@@ -1,0 +1,14 @@
+[
+  {
+    "binPath": "./data/image-scene/pixels.bin",
+    "metaPath": "./data/image-scene/metadata.json"
+  },
+  {
+    "binPath": "./data/image-tree_trunk/pixels.bin",
+    "metaPath": "./data/image-tree_trunk/metadata.json"
+  },
+  {
+    "binPath": "./data/image-bat_signal/pixels.bin",
+    "metaPath": "./data/image-bat_signal/metadata.json"
+  }
+]

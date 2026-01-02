@@ -42,7 +42,7 @@ const getWriteParams = async (imagePath) => {
     await Deno.mkdir(dirPath);
     console.log("DIRECTORY created", dirPath);
   } catch (err) {
-    console.log(err.name, " : ERROR");
+    // console.log(err.name, " : ERROR");
   }
 
   const imageData = await Deno.readFile(imagePath);
@@ -64,11 +64,9 @@ export const writeBinaryAndHeader = async (imgPath = "") => {
   const imageAlreadyProcessed = Deno.readDirSync(dirPath);
   const paths = { binPath, metaPath, metadata };
 
-  console.log({ metadata });
+  // console.log({ metadata });
 
-  if (imageAlreadyProcessed.toArray().length === 2) {
-    console.log("BIN EXISTS");
-
+  if (imageAlreadyProcessed.toArray().length === 2) { //BIN AND META is already present
     return paths;
   }
 
